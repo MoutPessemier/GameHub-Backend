@@ -1,0 +1,47 @@
+{
+  "name": "gamehub-backend-express",
+  "version": "1.0.0",
+  "description": "The backend for the GameHub app. This app is about meeting other people and playing (board)games together. You can make or participate in parties and enjoy evenings with friends and foes.",
+  "main": "index.ts",
+  "scripts": {
+    "test": "NODE_ENV=test jest -i",
+    "test:watch": "NODE_ENV=test jest --watch -i",
+    "test:coverage": "NODE_ENV=test jest --coverage --silent -i",
+    "dev": "NODE_ENV=local ts-node-dev --transpileOnly src/index.ts",
+    "build": "NODE_ENV=rimraf dist; tsc",
+    "docker-run-dev": "docker-compose up; NODE_ENV=local ts-node-dev --transpileOnly src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MoutPessemier/GameHub-Backend-Express.git"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "mongodb"
+  ],
+  "author": "Mout Pessemier",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MoutPessemier/GameHub-Backend-Express/issues"
+  },
+  "homepage": "https://github.com/MoutPessemier/GameHub-Backend-Express#readme",
+  "dependencies": {
+    "@sentry/node": "^5.7.0",
+    "@types/dotenv": "^6.1.1",
+    "@types/express": "^4.17.1",
+    "@types/lodash": "^4.14.144",
+    "@types/mongoose": "^5.5.20",
+    "dotenv": "^8.1.0",
+    "express": "^4.17.1",
+    "jest": "^24.9.0",
+    "jest-junit": "^8.0.0",
+    "lodash": "^4.17.15",
+    "mongoose": "^5.7.4",
+    "sentry": "^0.1.2",
+    "ts-jest": "^24.1.0",
+    "ts-node": "^8.4.1",
+    "ts-node-dev": "^1.0.0-pre.43",
+    "typescript": "^3.6.4"
+  }
+}
