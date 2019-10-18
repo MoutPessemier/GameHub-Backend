@@ -5,6 +5,9 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import * as Sentry from '@sentry/node';
 import connect from './database/index';
+import userRoutes from './services/userService';
+import gameRoutes from './services/gameService';
+import partyRoutes from './services/partyService';
 
 // Sentry.init({ dsn: process.env.SENTRY_DSN, environment: process.env.NODE_ENV });
 
@@ -16,6 +19,9 @@ const startServer = async () => {
     app.use(bodyParser.json());
     app.use(routes);
     routes.get('/', (req, res) => res.send('OK'));
+    routes.use('/', userRoutes);
+    routes.use('/', gameRoutes);
+    routes.use('/', partyRoutes);
     const httpServer: Server = http.createServer(app);
     httpServer.listen(process.env.PORT, async () => {
       console.log(`🚀 Server ready at http://localhost:${process.env.PORT}`);

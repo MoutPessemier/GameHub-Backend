@@ -3,7 +3,10 @@ import mongoose, { Document, Schema } from 'mongoose';
 enum GameType {
   BOARD_GAME,
   CARD_GAME,
-  CONSOLE_GAME
+  VIDEO_GAME,
+  DnD,
+  PARTY_GAME,
+  FAMILY_GAME
 }
 export interface Game {
   _id: any;

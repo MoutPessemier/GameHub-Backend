@@ -1,21 +1,24 @@
 import mongoose, { Document, Schema } from 'mongoose';
+import { User } from './userModel';
 
 export interface GameParty {
   _id: any;
-  location: any;
+  //location: any;
+  name: string;
   date: Date;
   maxSize: number;
-  participants: number;
+  participants: User[];
 }
 
 export interface GamePartyDocument extends GameParty, Document {}
 
 const schema = new Schema(
   {
-    location: { type: Schema.Types.ObjectId, ref: 'location', required: true },
+    //location: {},
+    name: { type: String, required: true },
     date: { type: Date, required: true },
     maxSize: { type: Number, required: true },
-    participants: { type: Number, required: true }
+    participants: [{ type: Schema.Types.ObjectId, ref: 'users', required: true }]
   },
   { _id: true, timestamps: true }
 );
