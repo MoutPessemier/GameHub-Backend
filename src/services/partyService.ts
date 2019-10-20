@@ -11,7 +11,11 @@ routes.post('/createParty', async (req, res) => {
     name: req.body.name,
     date: stringToDate(req.body.date),
     maxSize: req.body.maxSize,
-    participants: req.body.participants
+    participants: req.body.participants,
+    location: {
+      type: 'Point',
+      coordinates: req.body.coordinates
+    }
   });
   res.send({ party });
 });
@@ -23,7 +27,11 @@ routes.put('/updateParty', async (req, res) => {
       name: req.body.name,
       date: stringToDate(req.body.date),
       maxSize: req.body.maxSize,
-      participants: req.body.participants
+      participants: req.body.participants,
+      location: {
+        type: 'Point',
+        coordinates: req.body.coordinates
+      }
     },
     { new: true, upsert: true }
   );

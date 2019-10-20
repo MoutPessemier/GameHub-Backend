@@ -8,6 +8,7 @@ export interface GameParty {
   date: Date;
   maxSize: number;
   participants: User[];
+  location: Location;
 }
 
 export interface GamePartyDocument extends GameParty, Document {}
@@ -18,7 +19,11 @@ const schema = new Schema(
     name: { type: String, required: true },
     date: { type: Date, required: true },
     maxSize: { type: Number, required: true },
-    participants: [{ type: Schema.Types.ObjectId, ref: 'users', required: true }]
+    participants: [{ type: Schema.Types.ObjectId, ref: 'users', required: true }],
+    location: {
+      type: { type: String, enum: ['Point'], required: true },
+      coordinates: { type: [Number], required: true }
+    }
   },
   { _id: true, timestamps: true }
 );
