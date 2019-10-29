@@ -15,7 +15,7 @@ export interface User {
   birthDate: Date;
   userRole: UserRole;
   password: string;
-  //location: any;
+  maxDistance: number;
 }
 
 export interface UserDocument extends User, Document {}
@@ -28,7 +28,8 @@ const schema = new Schema(
     email: { type: String, required: true, unique: true },
     birthDate: { type: Date, required: true },
     userRole: { type: String, enum: Object.values(UserRole), required: true },
-    password: { type: String, required: true }
+    password: { type: String, required: true },
+    maxDistance: { type: Number, required: true }
   },
   { _id: true, timestamps: true }
 );

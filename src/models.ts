@@ -1,6 +1,6 @@
 import * as user from './modules/userModel';
 import * as game from './modules/gameModel';
-import * as party from './modules/partyModule';
+import * as party from './modules/partyModel';
 
 export type Models = typeof models;
 
