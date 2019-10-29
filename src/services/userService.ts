@@ -1,16 +1,48 @@
 import { Router } from 'express';
 import models from '../models';
-import { validatePhone, validateEmail } from '../util/validators';
+import { validatePhone, validateEmail, isOldEnough } from '../util/validators';
 import { stringToDate } from '../util/parsers';
+import { hashPassword } from '../util/helpers';
 
 const routes = Router();
 
-//TODO: encrypt password
-routes.put('/updateUser', async (req, res) => {
-  const errors = { email: '', phone: '' };
+routes.post('/register', async (req, res) => {
+  const errors = { email: '', phone: '', birthDate: '' };
   if (!validateEmail(req.body.email)) errors.email = '';
   if (!validatePhone(req.body.phone)) errors.phone = '';
-  if (errors.email !== '' && errors.phone !== '') res.send({ errors });
+  if (!isOldEnough(stringToDate(req.body.birthDate))) errors.birthDate = '';
+  if (errors.email !== '' || errors.phone !== '' || errors.birthDate !== '') res.send({ errors });
+  const hashedPass = await hashPassword(req.body.password);
+  console.log('6', hashedPass);
+  const user = await models.user.model.create({
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    telephone: req.body.telephone,
+    email: req.body.email,
+    birthDate: stringToDate(req.body.birthDate),
+    userRole: req.body.userRole,
+    password: hashedPass
+  });
+  res.send({ user });
+});
+
+routes.post('/login', async (req, res) => {
+  const user = await models.user.model.findOne({ email: req.body.email });
+  if (!user) res.send({ error: `No user found with email: ${req.body.email}.` });
+  const hashedPass = await hashPassword(req.body.password);
+  if (user.password !== hashedPass) {
+    res.send({ error: `Passwords does not match, try again.` });
+  }
+  res.send({ user });
+});
+
+routes.put('/updateUser', async (req, res) => {
+  const errors = { email: '', phone: '', birthDate: '' };
+  if (!validateEmail(req.body.email)) errors.email = '';
+  if (!validatePhone(req.body.phone)) errors.phone = '';
+  if (!isOldEnough(stringToDate(req.body.birthDate))) errors.birthDate = '';
+  if (errors.email !== '' || errors.phone !== '' || errors.birthDate !== '') res.send({ errors });
+  const hashedPass = await hashPassword(req.body.password);
   const updatedUser = await models.user.model.findByIdAndUpdate(
     { _id: req.body.id },
     {
@@ -20,7 +52,7 @@ routes.put('/updateUser', async (req, res) => {
       email: req.body.email,
       birthDate: stringToDate(req.body.birthDate),
       userRole: req.body.userRole,
-      password: req.body.password
+      password: hashedPass
     },
     { new: true, upsert: true }
   );
@@ -30,27 +62,6 @@ routes.put('/updateUser', async (req, res) => {
 routes.delete('deleteUser', async (req, res) => {
   await models.user.model.deleteOne({ _id: req.body.id });
   res.send({ id: req.body.id });
-});
-
-routes.post('/login', async (req, res) => {});
-
-//TODO: encrypt password
-//TODO: jwt
-routes.post('/register', async (req, res) => {
-  const errors = { email: '', phone: '' };
-  if (!validateEmail(req.body.email)) errors.email = '';
-  if (!validatePhone(req.body.phone)) errors.phone = '';
-  if (errors.email !== '' && errors.phone !== '') res.send({ errors });
-  const user = await models.user.model.create({
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    telephone: req.body.telephone,
-    email: req.body.email,
-    birthDate: stringToDate(req.body.birthDate),
-    userRole: req.body.userRole,
-    password: req.body.password
-  });
-  res.send({ user });
 });
 
 export default routes;

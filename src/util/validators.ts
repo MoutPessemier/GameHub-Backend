@@ -7,3 +7,8 @@ export const validateEmail = (email: string): boolean => {
   const mailRegEx = /^([a-zA-Z]+[a-zA-Z0-9.\-_éèàùäëïöüâêîôû]*)@([a-z]+)[.]([a-z]+)([.][a-z]+)*$/g;
   return mailRegEx.test(email);
 };
+
+export const isOldEnough = (birthdate: Date): boolean => {
+  const age = new Date().getFullYear() - birthdate.getFullYear();
+  return age >= 18;
+};

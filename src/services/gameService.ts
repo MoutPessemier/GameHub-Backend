@@ -3,12 +3,12 @@ import models from '../models';
 
 const routes = Router();
 
-routes.get('/allGames', async (req, res) => {
+routes.get('/games', async (req, res) => {
   const games = await models.game.model.find({});
   res.send({ games });
 });
 
-routes.post('/makeGame', async (req, res) => {
+routes.post('/createGame', async (req, res) => {
   const game = await models.game.model.create({
     name: req.body.name,
     description: req.body.description,
@@ -34,7 +34,7 @@ routes.put('/updateGame', async (req, res) => {
   res.send({ updatedGame });
 });
 
-routes.delete('deleteGame', async (req, res) => {
+routes.delete('/deleteGame', async (req, res) => {
   await models.game.model.deleteOne({ _id: req.body.id });
   res.send({ id: req.body.id });
 });

@@ -5,5 +5,6 @@ declare namespace NodeJS {
     MONGOOSE_URI: string;
     MONGOOSE_NAME: string;
     SENTRY_DSN: string;
+    SALT: string;
   }
 }

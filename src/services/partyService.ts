@@ -4,7 +4,11 @@ import { stringToDate } from '../util/parsers';
 
 const routes = Router();
 
-routes.get('/getPartiesNearYou', (req, res) => {});
+routes.get('/getPartiesNearYou', async (req, res) => {
+  //TODO: incorporate distance
+  const parties = await models.party.model.find({});
+  res.send({ parties });
+});
 
 routes.post('/createParty', async (req, res) => {
   const party = await models.party.model.create({
