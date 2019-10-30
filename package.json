@@ -9,7 +9,7 @@
     "test:watch": "NODE_ENV=test jest --watch -i",
     "test:coverage": "NODE_ENV=test jest --coverage --silent -i",
     "dev": "NODE_ENV=local ts-node-dev --transpileOnly src/index.ts",
-    "build": "NODE_ENV=rimraf dist; tsc",
+    "build": "rimraf dist; tsc",
     "docker-run-dev": "docker-compose up; NODE_ENV=local ts-node-dev --transpileOnly src/index.ts"
   },
   "repository": {
@@ -41,7 +41,7 @@
     "jest": "^24.9.0",
     "jest-junit": "^8.0.0",
     "lodash": "^4.17.15",
-    "mongoose": "^5.7.4",
+    "mongoose": "^5.7.7",
     "sentry": "^0.1.2",
     "ts-jest": "^24.1.0",
     "ts-node": "^8.4.1",
