@@ -3,7 +3,7 @@ import * as bcript from 'bcrypt';
 const earthRadius = 6371;
 
 export const hashPassword = async (password: string): Promise<string> => {
-  const hashedPass = await bcript.hash(password, 10);
+  const hashedPass = await bcript.hash(password + process.env.SALT, 10);
   return hashedPass;
 };
 

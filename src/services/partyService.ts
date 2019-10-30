@@ -65,17 +65,23 @@ routes.delete('/deleteParty', async (req, res) => {
 routes.post('/joinParty', async (req, res) => {
   const party = await models.party.model.findById({ _id: req.body.partyId });
   if (!(party.participants.length + 1 <= party.maxSize)) res.send({ error: 'The party is already full.' });
-  party.updateOne({
-    name: party.name,
-    date: party.date,
-    maxSize: party.maxSize,
-    participants: [...party.participants, req.body.userId],
-    game: party.game,
-    location: {
-      type: party.location.type,
-      coordinates: party.location.coordinates
-    }
-  });
+  if (party.participants.includes(req.body.userId)) res.send({ error: 'You already joined this party!' });
+  const joinedParty = await models.party.model.findByIdAndUpdate(
+    { _id: req.body.partyId },
+    {
+      name: party.name,
+      date: party.date,
+      maxSize: party.maxSize,
+      participants: [...party.participants, req.body.userId],
+      game: party.game,
+      location: {
+        type: party.location.type,
+        coordinates: party.location.coordinates
+      }
+    },
+    { new: true, upsert: true }
+  );
+  res.send({ joinedParty });
 });
 
 export default routes;

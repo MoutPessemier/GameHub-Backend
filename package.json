@@ -4,6 +4,7 @@
   "description": "The backend for the GameHub app. This app is about meeting other people and playing (board)games together. You can make or participate in parties and enjoy evenings with friends and foes.",
   "main": "index.ts",
   "scripts": {
+    "start": "NODE_ENV=production ts-node-dev --transpileOnly src/index.ts",
     "test": "NODE_ENV=test jest -i",
     "test:watch": "NODE_ENV=test jest --watch -i",
     "test:coverage": "NODE_ENV=test jest --coverage --silent -i",

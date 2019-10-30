@@ -13,7 +13,6 @@ routes.post('/register', async (req, res) => {
   if (!isOldEnough(stringToDate(req.body.birthDate))) errors.birthDate = '';
   if (errors.email !== '' || errors.phone !== '' || errors.birthDate !== '') res.send({ errors });
   const hashedPass = await hashPassword(req.body.password);
-  console.log('6', hashedPass);
   const user = await models.user.model.create({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
@@ -21,7 +20,8 @@ routes.post('/register', async (req, res) => {
     email: req.body.email,
     birthDate: stringToDate(req.body.birthDate),
     userRole: req.body.userRole,
-    password: hashedPass
+    password: hashedPass,
+    maxDistance: req.body.maxDistance
   });
   res.send({ user });
 });
@@ -52,14 +52,15 @@ routes.put('/updateUser', async (req, res) => {
       email: req.body.email,
       birthDate: stringToDate(req.body.birthDate),
       userRole: req.body.userRole,
-      password: hashedPass
+      password: hashedPass,
+      maxDistance: req.body.maxDistance
     },
     { new: true, upsert: true }
   );
   res.send({ updatedUser });
 });
 
-routes.delete('deleteUser', async (req, res) => {
+routes.delete('/deleteUser', async (req, res) => {
   await models.user.model.deleteOne({ _id: req.body.id });
   res.send({ id: req.body.id });
 });
