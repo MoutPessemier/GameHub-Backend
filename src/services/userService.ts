@@ -2,7 +2,7 @@ import { Router } from 'express';
 import models from '../models';
 import { validatePhone, validateEmail, isOldEnough } from '../util/validators';
 import { stringToDate } from '../util/parsers';
-import { hashPassword } from '../util/helpers';
+import { hashPassword, comparePasswords } from '../util/helpers';
 
 const routes = Router();
 
@@ -29,8 +29,8 @@ routes.post('/register', async (req, res) => {
 routes.post('/login', async (req, res) => {
   const user = await models.user.model.findOne({ email: req.body.email });
   if (!user) res.send({ error: `No user found with email: ${req.body.email}.` });
-  const hashedPass = await hashPassword(req.body.password);
-  if (user.password !== hashedPass) {
+  const isEqual = await comparePasswords(req.body.password, user.password);
+  if (!isEqual) {
     res.send({ error: `Passwords does not match, try again.` });
   }
   res.send({ user });

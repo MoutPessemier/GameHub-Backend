@@ -1,10 +1,14 @@
-import * as bcript from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 
 const earthRadius = 6371;
 
 export const hashPassword = async (password: string): Promise<string> => {
-  const hashedPass = await bcript.hash(password + process.env.SALT, 10);
+  const hashedPass = await bcrypt.hash(password + process.env.SALT, 10);
   return hashedPass;
+};
+
+export const comparePasswords = async (pass: string, hashedPass: string) => {
+  return await bcrypt.compare(pass, hashedPass);
 };
 
 export const getDistance = (co1: number[], co2: number[]): number => {

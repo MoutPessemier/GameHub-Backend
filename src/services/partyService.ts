@@ -5,8 +5,8 @@ import { stringToDate } from '../util/parsers';
 const routes = Router();
 
 routes.get('/getPartiesNearYou', async (req, res) => {
-  const maxDistance = req.body.distance * 1000; //convert to meters
-  const myCoords = req.body.coordinates;
+  const maxDistance = parseInt(req.query.distance) * 1000; //convert to meters
+  const myCoords = [parseInt(req.query.lat), parseInt(req.query.long)];
   const parties = await models.party.model
     .find({
       location: {
