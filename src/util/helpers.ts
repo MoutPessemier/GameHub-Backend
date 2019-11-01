@@ -11,6 +11,13 @@ export const comparePasswords = async (pass: string, hashedPass: string) => {
   return await bcrypt.compare(pass, hashedPass);
 };
 
+export const stringToDate = (date: string): Date => {
+  if (!date) return new Date();
+  const stringArray = date.split('-');
+  const numberArray = stringArray.map(s => Number.parseInt(s));
+  return new Date(numberArray[0], numberArray[1], numberArray[2]);
+};
+
 export const getDistance = (co1: number[], co2: number[]): number => {
   const [lat1, long1] = co1;
   const [lat2, long2] = co2;

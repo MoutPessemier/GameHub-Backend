@@ -8,6 +8,11 @@ routes.get('/games', async (req, res) => {
   res.send({ games });
 });
 
+routes.get('/gameById', async (req, res) => {
+  const game = await models.game.model.findById({ _id: req.query.id });
+  res.send({ game });
+});
+
 routes.post('/createGame', async (req, res) => {
   const game = await models.game.model.create({
     name: req.body.name,

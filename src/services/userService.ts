@@ -1,8 +1,7 @@
 import { Router } from 'express';
 import models from '../models';
 import { validatePhone, validateEmail, isOldEnough } from '../util/validators';
-import { stringToDate } from '../util/parsers';
-import { hashPassword, comparePasswords } from '../util/helpers';
+import { hashPassword, comparePasswords, stringToDate } from '../util/helpers';
 
 const routes = Router();
 

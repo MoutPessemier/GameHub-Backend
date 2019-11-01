@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import models from '../models';
-import { stringToDate } from '../util/parsers';
+import { stringToDate } from '../util/helpers';
 
 const routes = Router();
 
@@ -29,7 +29,7 @@ routes.post('/createParty', async (req, res) => {
     date: stringToDate(req.body.date),
     maxSize: req.body.maxSize,
     participants: req.body.participants,
-    game: req.body.game,
+    gameId: req.body.gameId,
     location: {
       type: 'Point',
       coordinates: req.body.coordinates
@@ -46,7 +46,7 @@ routes.put('/updateParty', async (req, res) => {
       date: stringToDate(req.body.date),
       maxSize: req.body.maxSize,
       participants: req.body.participants,
-      game: req.body.game,
+      gameId: req.body.gameId,
       location: {
         type: 'Point',
         coordinates: req.body.coordinates
@@ -73,7 +73,7 @@ routes.post('/joinParty', async (req, res) => {
       date: party.date,
       maxSize: party.maxSize,
       participants: [...party.participants, req.body.userId],
-      game: party.game,
+      gameId: party.gameId,
       location: {
         type: party.location.type,
         coordinates: party.location.coordinates
