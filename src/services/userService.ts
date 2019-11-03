@@ -22,7 +22,7 @@ routes.post('/register', async (req, res) => {
     password: hashedPass,
     maxDistance: req.body.maxDistance
   });
-  res.send({ user });
+  res.send(user);
 });
 
 routes.post('/login', async (req, res) => {
@@ -32,7 +32,7 @@ routes.post('/login', async (req, res) => {
   if (!isEqual) {
     res.send({ error: `Passwords does not match, try again.` });
   }
-  res.send({ user });
+  res.send(user);
 });
 
 routes.put('/updateUser', async (req, res) => {
@@ -56,12 +56,12 @@ routes.put('/updateUser', async (req, res) => {
     },
     { new: true, upsert: true }
   );
-  res.send({ updatedUser });
+  res.send(updatedUser);
 });
 
 routes.delete('/deleteUser', async (req, res) => {
-  await models.user.model.deleteOne({ _id: req.body.id });
-  res.send({ id: req.body.id });
+  const deletedUser = await models.user.model.findByIdAndDelete({ _id: req.body.id });
+  res.send(deletedUser);
 });
 
 export default routes;

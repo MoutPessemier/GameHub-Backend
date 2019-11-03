@@ -20,7 +20,7 @@ routes.get('/getPartiesNearYou', async (req, res) => {
       }
     })
     .limit(25);
-  res.send({ parties });
+  res.send(parties);
 });
 
 routes.post('/createParty', async (req, res) => {
@@ -35,7 +35,7 @@ routes.post('/createParty', async (req, res) => {
       coordinates: req.body.coordinates
     }
   });
-  res.send({ party });
+  res.send(party);
 });
 
 routes.put('/updateParty', async (req, res) => {
@@ -54,12 +54,12 @@ routes.put('/updateParty', async (req, res) => {
     },
     { new: true, upsert: true }
   );
-  res.send({ updatedParty });
+  res.send(updatedParty);
 });
 
 routes.delete('/deleteParty', async (req, res) => {
-  await models.party.model.deleteOne({ _id: req.body.id });
-  res.send({ id: req.body.id });
+  const deletedParty = await models.party.model.findByIdAndDelete({ _id: req.body.id });
+  res.send(deletedParty);
 });
 
 routes.post('/joinParty', async (req, res) => {
@@ -81,7 +81,7 @@ routes.post('/joinParty', async (req, res) => {
     },
     { new: true, upsert: true }
   );
-  res.send({ joinedParty });
+  res.send(joinedParty);
 });
 
 export default routes;
