@@ -1,7 +1,5 @@
 {
-  "addons": [
-
-  ],
+  "addons": [],
   "buildpacks": [
     {
       "url": "heroku/nodejs"
@@ -28,7 +26,6 @@
     }
   },
   "name": "GameHub-Backend-Express",
-  "scripts": {
-  },
+  "scripts": {},
   "stack": "heroku-18"
 }

@@ -6,7 +6,8 @@ enum GameType {
   VIDEO_GAME,
   DnD,
   PARTY_GAME,
-  FAMILY_GAME
+  FAMILY_GAME,
+  UNKNOWN
 }
 export interface Game {
   _id: any;
