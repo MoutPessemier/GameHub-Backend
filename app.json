@@ -1,0 +1,34 @@
+{
+  "addons": [
+
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "description": "",
+  "env": {
+    "MONGOOSE_NAME": {
+      "required": true
+    },
+    "MONGOOSE_URI": {
+      "required": true
+    },
+    "SALT": {
+      "required": true
+    },
+    "SENTRY_DSN": {
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "name": "GameHub-Backend-Express",
+  "scripts": {
+  },
+  "stack": "heroku-18"
+}
