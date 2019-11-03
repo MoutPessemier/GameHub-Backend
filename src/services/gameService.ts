@@ -5,12 +5,11 @@ const routes = Router();
 
 routes.get('/games', async (req, res) => {
   const games = await models.game.model.find({});
-  res.send({ games });
+  res.send(games);
 });
-
 routes.get('/gameById', async (req, res) => {
   const game = await models.game.model.findById({ _id: req.query.id });
-  res.send({ game });
+  res.send(game);
 });
 
 routes.post('/createGame', async (req, res) => {
@@ -21,7 +20,7 @@ routes.post('/createGame', async (req, res) => {
     requirements: req.body.requirements,
     type: req.body.type
   });
-  res.send({ game });
+  res.send(game);
 });
 
 routes.put('/updateGame', async (req, res) => {
@@ -36,12 +35,12 @@ routes.put('/updateGame', async (req, res) => {
     },
     { new: true, upsert: true }
   );
-  res.send({ updatedGame });
+  res.send(updatedGame);
 });
 
 routes.delete('/deleteGame', async (req, res) => {
-  await models.game.model.deleteOne({ _id: req.body.id });
-  res.send({ id: req.body.id });
+  const deletedGame = await models.game.model.findByIdAndDelete({ _id: req.body.id });
+  res.send(deletedGame);
 });
 
 export default routes;

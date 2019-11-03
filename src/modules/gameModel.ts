@@ -21,7 +21,7 @@ export interface GameDocument extends Game, Document {}
 
 const schema = new Schema(
   {
-    name: { type: String, required: true },
+    name: { type: String, required: true, unique: true },
     description: { type: String, required: true },
     rules: { type: String, required: true },
     requirements: { type: String, required: false },
