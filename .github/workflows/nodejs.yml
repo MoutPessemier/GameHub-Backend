@@ -22,8 +22,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: GitHub Action for Heroku
       uses: actions/heroku@1.0.0
-    - name: Send Push Notification
-      uses: techulus/push-github-action@0.0.1
     - name: npm install and build
       run: |
           npm ci
