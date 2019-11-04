@@ -16,4 +16,4 @@ The backend for the GameHub app. This app is about meeting other people and play
 - [Android Frontend](https://github.com/MoutPessemier/GameHub-Android)
 - [GraphQL Backend](https://github.com/MoutPessemier/GameHub-Backend-Graphql)
 - [Twitter](https://twitter.com/MoutPessemier)
-- [LinkedIn](https://www.linkedin.com/in/mout-pessemier-9954a9163/)
+- [LinkedIn](https://www.linkedin.com/in/moutpessemier/)
