@@ -6,9 +6,10 @@ export interface GameParty {
   name: string;
   date: Date;
   maxSize: number;
-  participants: User[];
+  participants: any[];
   gameId: any;
   location: { type: string; coordinates: number[] };
+  declines: any[];
 }
 
 export interface GamePartyDocument extends GameParty, Document {}
@@ -23,7 +24,8 @@ const schema = new Schema(
     location: {
       type: { type: String, enum: ['Point'], required: true },
       coordinates: { type: [Number], required: true }
-    }
+    },
+    declines: [{ type: Schema.Types.ObjectId, ref: 'users', required: false }]
   },
   { _id: true, timestamps: true }
 );

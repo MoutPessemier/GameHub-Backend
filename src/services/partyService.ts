@@ -9,15 +9,21 @@ routes.get('/getPartiesNearYou', async (req, res) => {
   const myCoords = [parseInt(req.query.lat), parseInt(req.query.long)];
   const parties = await models.party.model
     .find({
-      location: {
-        $near: {
-          $maxDistance: maxDistance,
-          $geometry: {
-            type: 'Point',
-            coordinates: myCoords
+      $and: [
+        {
+          location: {
+            $near: {
+              $maxDistance: maxDistance,
+              $geometry: {
+                type: 'Point',
+                coordinates: myCoords
+              }
+            }
           }
-        }
-      }
+        },
+        { declines: { $nin: [req.query.userId] } },
+        { participants: { $nin: [req.query.userId] } }
+      ]
     })
     .limit(25);
   res.send(parties);
@@ -33,7 +39,8 @@ routes.post('/createParty', async (req, res) => {
     location: {
       type: 'Point',
       coordinates: req.body.coordinates
-    }
+    },
+    declines: req.body.declines
   });
   res.send(party);
 });
@@ -50,7 +57,8 @@ routes.put('/updateParty', async (req, res) => {
       location: {
         type: 'Point',
         coordinates: req.body.coordinates
-      }
+      },
+      declines: req.body.declines
     },
     { new: true, upsert: true }
   );
@@ -77,11 +85,34 @@ routes.post('/joinParty', async (req, res) => {
       location: {
         type: party.location.type,
         coordinates: party.location.coordinates
-      }
+      },
+      declines: party.declines
     },
     { new: true, upsert: true }
   );
   res.send(joinedParty);
+});
+
+routes.post('/declineParty', async (req, res) => {
+  const party = await models.party.model.findById({ _id: req.body.partyId });
+  if (!party) res.send({ error: `No party found with id ${req.body.partyId}` });
+  const declinedParty = await models.party.model.findByIdAndUpdate(
+    { _id: req.body.partyId },
+    {
+      name: party.name,
+      date: party.date,
+      maxSize: party.maxSize,
+      participants: party.participants,
+      gameId: party.gameId,
+      location: {
+        type: party.location.type,
+        coordinates: party.location.coordinates
+      },
+      declines: [...party.declines, , req.body.userId]
+    },
+    { new: true, upsert: true }
+  );
+  res.send(declinedParty);
 });
 
 export default routes;
