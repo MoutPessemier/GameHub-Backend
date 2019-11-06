@@ -10,6 +10,10 @@ The backend for the GameHub app. This app is about meeting other people and play
 
 ## NPM Commands
 
+- `npm run dev` --> starts the server
+- `npm run test[:watch|:coverage]` --> runs the tests
+- `npm run build` --> builds the server
+
 ## Links
 
 - [IOS Frontend](https://github.com/MoutPessemier/GameHub-IOS)
