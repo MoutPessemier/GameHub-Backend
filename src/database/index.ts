@@ -13,12 +13,11 @@ const connect = async () => {
     });
     return connection;
   } catch (e) {
-    // Sentry.configureScope(scope => {
-    //   scope.setLevel(Sentry.Severity.Fatal);
-    //   scope.setTag('MongoDB', process.env.MONGODB_URI);
-    // });
-    // Sentry.captureException(e);
-    console.log(e);
+    Sentry.configureScope(scope => {
+      scope.setLevel(Sentry.Severity.Fatal);
+      scope.setTag('MongoDB', process.env.MONGODB_URI);
+    });
+    Sentry.captureException(e);
   }
 };
 

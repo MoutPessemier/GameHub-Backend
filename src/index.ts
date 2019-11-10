@@ -9,7 +9,7 @@ import userRoutes from './services/userService';
 import gameRoutes from './services/gameService';
 import partyRoutes from './services/partyService';
 
-// Sentry.init({ dsn: process.env.SENTRY_DSN, environment: process.env.NODE_ENV });
+Sentry.init({ dsn: process.env.SENTRY_DSN, environment: process.env.NODE_ENV });
 
 const startServer = async () => {
   try {
@@ -36,7 +36,11 @@ const startServer = async () => {
     process.on('SIGINT', shutdown);
     process.on('SIGQUIT', shutdown);
   } catch (e) {
-    console.log(e);
+    Sentry.configureScope(scope => {
+      scope.setLevel(Sentry.Severity.Fatal);
+      scope.setTag('Startup', `http://localhost:${process.env.PORT}`);
+    });
+    Sentry.captureException(e);
   }
 };
 
