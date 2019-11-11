@@ -26,7 +26,7 @@ routes.get('/getPartiesNearYou', async (req, res) => {
       ]
     })
     .limit(25);
-  res.send(parties);
+  res.send({ parties });
 });
 
 routes.post('/createParty', async (req, res) => {

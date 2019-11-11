@@ -5,7 +5,7 @@ const routes = Router();
 
 routes.get('/games', async (req, res) => {
   const games = await models.game.model.find({});
-  res.send(games);
+  res.send({ games });
 });
 routes.get('/gameById', async (req, res) => {
   const game = await models.game.model.findById({ _id: req.query.id });
