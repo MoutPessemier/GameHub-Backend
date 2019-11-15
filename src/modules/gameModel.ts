@@ -16,6 +16,7 @@ export interface Game {
   rules: string;
   requirements: string;
   type: GameType;
+  visible: boolean;
 }
 
 export interface GameDocument extends Game, Document {}
@@ -26,7 +27,8 @@ const schema = new Schema(
     description: { type: String, required: true },
     rules: { type: String, required: true },
     requirements: { type: String, required: false },
-    type: { type: String, enum: Object.values(GameType), required: true }
+    type: { type: String, enum: Object.values(GameType), required: true },
+    visible: { type: Boolean, required: true }
   },
   { _id: true, timestamps: true }
 );
