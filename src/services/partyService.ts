@@ -40,6 +40,14 @@ routes.get('/getPartiesNearYou', async (req, res) => {
   res.send({ parties });
 });
 
+routes.get('/getJoinedParties', async (req, res) => {
+  const parties = await models.party.model.find({ participants: [req.query.userId] }).catch(e => {
+    Sentry.captureException(e);
+    res.status(400).send(e);
+  });
+  res.send({ parties });
+});
+
 routes.post('/createParty', async (req, res) => {
   const party = await models.party.model
     .create({
