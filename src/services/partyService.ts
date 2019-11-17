@@ -12,18 +12,19 @@ Sentry.configureScope(scope => {
 
 routes.get('/getPartiesNearYou', async (req, res) => {
   const maxDistance = parseInt(req.query.distance) * 1000; //convert to meters
-  const myCoords = [parseInt(req.query.lat), parseInt(req.query.long)];
+  const myCoords = [parseFloat(req.query.lat), parseFloat(req.query.long)];
   const parties = await models.party.model
     .find({
       $and: [
         {
           location: {
-            $near: {
-              $maxDistance: maxDistance,
+            $nearSphere: {
               $geometry: {
                 type: 'Point',
                 coordinates: myCoords
-              }
+              },
+              $maxDistance: maxDistance,
+              $minDistance: 0
             }
           }
         },
