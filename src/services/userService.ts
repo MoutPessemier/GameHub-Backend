@@ -11,6 +11,14 @@ Sentry.configureScope(scope => {
   scope.setTag('UserService', `http://localhost:${process.env.PORT}`);
 });
 
+routes.get('/getUserByEmail', async (req, res) => {
+  const user = await models.user.model.find({ email: req.query.email }).catch(e => {
+    Sentry.captureException(e);
+    res.status(404).send(e);
+  });
+  res.send(user);
+});
+
 // Athentication is handled by Auth0
 
 // routes.post('/register', async (req, res) => {
