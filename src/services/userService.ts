@@ -12,7 +12,7 @@ Sentry.configureScope(scope => {
 });
 
 routes.get('/getUserByEmail', async (req, res) => {
-  const user = await models.user.model.find({ email: req.query.email }).catch(e => {
+  const user = await models.user.model.findOne({ email: req.query.email }).catch(e => {
     Sentry.captureException(e);
     res.status(404).send(e);
   });
