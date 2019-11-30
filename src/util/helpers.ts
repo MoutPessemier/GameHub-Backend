@@ -1,5 +1,20 @@
 import * as bcrypt from 'bcrypt';
 
+const monthMap = new Map([
+  ['Jan', 1],
+  ['Feb', 2],
+  ['Mar', 3],
+  ['Apr', 4],
+  ['May', 5],
+  ['Jun', 6],
+  ['Jul', 7],
+  ['Aug', 8],
+  ['Sep', 9],
+  ['Oct', 10],
+  ['Nov', 11],
+  ['Dec', 12]
+]);
+
 const earthRadius = 6371;
 
 export const hashPassword = async (password: string): Promise<string> => {
@@ -16,6 +31,16 @@ export const stringToDate = (date: string): Date => {
   const stringArray = date.split('-');
   const numberArray = stringArray.map(s => Number.parseInt(s));
   return new Date(numberArray[0], numberArray[1], numberArray[2]);
+};
+
+export const dateFix = (dateString: string) => {
+  const dateparts = dateString.split(' ');
+  const day = parseInt(dateparts[2]);
+  const month = monthMap.get(dateparts[1]);
+  const year = parseInt(dateparts[5]);
+
+  const date = new Date(year, month, day);
+  return date;
 };
 
 export const getDistance = (co1: number[], co2: number[]): number => {

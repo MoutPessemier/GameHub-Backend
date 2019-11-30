@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import * as Sentry from '@sentry/node';
 import models from '../models';
-import { stringToDate } from '../util/helpers';
+import { stringToDate, dateFix } from '../util/helpers';
 
 const routes = Router();
 
@@ -52,13 +52,14 @@ routes.post('/createParty', async (req, res) => {
   const party = await models.party.model
     .create({
       name: req.body.name,
-      date: stringToDate(req.body.date),
+      //date: stringToDate(req.body.date),
+      date: dateFix(req.body.date),
       maxSize: req.body.maxSize,
       participants: req.body.participants,
       gameId: req.body.gameId,
       location: {
         type: 'Point',
-        coordinates: req.body.coordinates
+        coordinates: req.body.location.coordinates
       },
       declines: req.body.declines
     })

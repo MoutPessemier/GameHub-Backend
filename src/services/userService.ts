@@ -77,20 +77,13 @@ routes.delete('/deleteUser', async (req, res) => {
     Sentry.captureException(e);
     res.status(400).send(e);
   });
-  const partiesWithUser = await models.party.model.find({
-    $or: [{ participants: { $in: [req.body.userId] } }, { declines: { $in: [req.body.userId] } }]
-  });
-  await Promise.all(
-    partiesWithUser.map(p => {
-      if (p.declines.includes(req.body.id)) {
-        const index = p.declines.indexOf(req.body.id);
-        p.declines.splice(index, 1);
-      }
-      if (p.participants.includes(req.body.id)) {
-        const index = p.participants.indexOf(req.body.id);
-        p.participants.splice(index, 1);
-      }
-    })
+  await models.party.model.updateMany(
+    { declines: { $in: [req.body.userId] } },
+    { $pull: { declines: req.body.userId } }
+  );
+  await models.party.model.updateMany(
+    { participants: { $in: [req.body.userId] } },
+    { $pull: { participants: req.body.userId } }
   );
   res.send(deletedUser);
 });
