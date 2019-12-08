@@ -41,7 +41,7 @@ routes.get('/getPartiesNearYou', async (req, res) => {
 });
 
 routes.get('/getJoinedParties', async (req, res) => {
-  const parties = await models.party.model.find({ participants: [req.query.userId] }).catch(e => {
+  const parties = await models.party.model.find({ participants: { $in: [req.query.userId] } }).catch(e => {
     Sentry.captureException(e);
     res.status(400).send(e);
   });
@@ -52,8 +52,8 @@ routes.post('/createParty', async (req, res) => {
   const party = await models.party.model
     .create({
       name: req.body.name,
-      //date: stringToDate(req.body.date),
-      date: dateFix(req.body.date),
+      date: stringToDate(req.body.date),
+      //date: dateFix(req.body.date),
       maxSize: req.body.maxSize,
       participants: req.body.participants,
       gameId: req.body.gameId,
@@ -76,7 +76,7 @@ routes.put('/updateParty', async (req, res) => {
       { _id: req.body.id },
       {
         name: req.body.name,
-        date: stringToDate(req.body.date),
+        date: dateFix(req.body.date),
         maxSize: req.body.maxSize,
         participants: req.body.participants,
         gameId: req.body.gameId,

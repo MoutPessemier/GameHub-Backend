@@ -2,7 +2,7 @@ import { Router } from 'express';
 import * as Sentry from '@sentry/node';
 import models from '../models';
 import { validatePhone, validateEmail, isOldEnough } from '../util/validators';
-import { hashPassword, comparePasswords, stringToDate } from '../util/helpers';
+import { hashPassword, comparePasswords, dateFix, stringToDate } from '../util/helpers';
 
 const routes = Router();
 
@@ -21,41 +21,41 @@ routes.get('/getUserByEmail', async (req, res) => {
 
 // Athentication is handled by Auth0
 
-// routes.post('/register', async (req, res) => {
-//   const errors = { email: '', phone: '', birthDate: '' };
-//   if (!validateEmail(req.body.email)) errors.email = '';
-//   if (!validatePhone(req.body.phone)) errors.phone = '';
-//   if (!isOldEnough(stringToDate(req.body.birthDate))) errors.birthDate = '';
-//   if (errors.email !== '' || errors.phone !== '' || errors.birthDate !== '') res.send({ errors });
-//   const hashedPass = await hashPassword(req.body.password);
-//   const user = await models.user.model.create({
-//     firstName: req.body.firstName,
-//     lastName: req.body.lastName,
-//     telephone: req.body.telephone,
-//     email: req.body.email,
-//     birthDate: stringToDate(req.body.birthDate),
-//     userRole: req.body.userRole,
-//     password: hashedPass,
-//     maxDistance: req.body.maxDistance
-//   });
-//   res.send(user);
-// });
+routes.post('/register', async (req, res) => {
+  const errors = { email: '', phone: '', birthDate: '' };
+  if (!validateEmail(req.body.email)) errors.email = '';
+  if (!validatePhone(req.body.phone)) errors.phone = '';
+  if (!isOldEnough(stringToDate(req.body.birthDate))) errors.birthDate = '';
+  if (errors.email !== '' || errors.phone !== '' || errors.birthDate !== '') res.send({ errors });
+  const hashedPass = await hashPassword(req.body.password);
+  const user = await models.user.model.create({
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    telephone: req.body.telephone,
+    email: req.body.email,
+    birthDate: stringToDate(req.body.birthDate),
+    userRole: req.body.userRole,
+    password: hashedPass,
+    maxDistance: req.body.maxDistance
+  });
+  res.send(user);
+});
 
-// routes.post('/login', async (req, res) => {
-//   const user = await models.user.model.findOne({ email: req.body.email });
-//   if (!user) res.send({ error: `No user found with email: ${req.body.email}.` });
-//   const isEqual = await comparePasswords(req.body.password, user.password);
-//   if (!isEqual) {
-//     res.send({ error: `Passwords does not match, try again.` });
-//   }
-//   res.send(user);
-// });
+routes.post('/login', async (req, res) => {
+  const user = await models.user.model.findOne({ email: req.body.email });
+  if (!user) res.send({ error: `No user found with email: ${req.body.email}.` });
+  const isEqual = await comparePasswords(req.body.password, user.password);
+  if (!isEqual) {
+    res.send({ error: `Passwords does not match, try again.` });
+  }
+  res.send(user);
+});
 
 routes.put('/updateUser', async (req, res) => {
   const errors = { email: '', phone: '', birthDate: '' };
   if (!validateEmail(req.body.email)) errors.email = '';
   if (!validatePhone(req.body.phone)) errors.phone = '';
-  if (!isOldEnough(stringToDate(req.body.birthDate))) errors.birthDate = '';
+  if (!isOldEnough(dateFix(req.body.birthDate))) errors.birthDate = '';
   if (errors.email !== '' || errors.phone !== '' || errors.birthDate !== '') res.status(406).send({ errors });
   const hashedPass = await hashPassword(req.body.password);
   const updatedUser = await models.user.model
@@ -66,7 +66,7 @@ routes.put('/updateUser', async (req, res) => {
         lastName: req.body.lastName,
         telephone: req.body.telephone,
         email: req.body.email,
-        birthDate: stringToDate(req.body.birthDate),
+        birthDate: dateFix(req.body.birthDate),
         userRole: req.body.userRole,
         password: hashedPass,
         maxDistance: req.body.maxDistance
