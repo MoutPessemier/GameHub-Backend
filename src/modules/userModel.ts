@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
-enum UserRole {
+export enum UserRole {
   OWNER,
   ADMIN,
   USER
@@ -10,11 +10,11 @@ export interface User {
   _id: any;
   firstName: string;
   lastName: string;
-  telephone: string;
+  //telephone: string;
   email: string;
-  birthDate: Date;
+  //birthDate: Date;
   userRole: UserRole;
-  password: string;
+  //password: string;
   maxDistance: number;
 }
 
@@ -24,11 +24,11 @@ const schema = new Schema(
   {
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    telephone: { type: String, required: true },
+    //telephone: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    birthDate: { type: Date, required: true },
+    //birthDate: { type: Date, required: true },
     userRole: { type: String, enum: Object.values(UserRole), required: true },
-    password: { type: String, required: true },
+    //password: { type: String, required: true },
     maxDistance: { type: Number, required: true }
   },
   { _id: true, timestamps: true }
