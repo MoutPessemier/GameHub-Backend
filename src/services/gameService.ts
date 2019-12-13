@@ -12,9 +12,9 @@ Sentry.configureScope(scope => {
 routes.get('/games', async (req, res) => {
   const games = await models.game.model.find({ visible: true }).catch(e => {
     Sentry.captureException(e);
-    res.status(400).send(e);
+    return res.sendStatus(400).send(e);
   });
-  res.send({ games });
+  return res.send({ games });
 });
 
 routes.post('/createGame', async (req, res) => {
@@ -29,9 +29,9 @@ routes.post('/createGame', async (req, res) => {
     })
     .catch(e => {
       Sentry.captureException(e);
-      res.status(400).send(e);
+      return res.sendStatus(400).send(e);
     });
-  res.send(game);
+  return res.send(game);
 });
 
 routes.put('/updateGame', async (req, res) => {
@@ -50,9 +50,9 @@ routes.put('/updateGame', async (req, res) => {
     )
     .catch(e => {
       Sentry.captureException(e);
-      res.status(404).send(e);
+      return res.sendStatus(404).send(e);
     });
-  res.send(updatedGame);
+  return res.send(updatedGame);
 });
 
 routes.delete('/deleteGame', async (req, res) => {
@@ -74,15 +74,15 @@ routes.delete('/deleteGame', async (req, res) => {
       )
       .catch(e => {
         Sentry.captureException(e);
-        res.status(400).send(e);
+        return res.sendStatus(400).send(e);
       });
-    res.send(invisbleGame);
+    return res.send(invisbleGame);
   } else {
     const deletedGame = await models.game.model.findByIdAndDelete({ _id: req.body.id }).catch(e => {
       Sentry.captureException(e);
-      res.status(400).send(e);
+      return res.sendStatus(400).send(e);
     });
-    res.send(deletedGame);
+    return res.send(deletedGame);
   }
 });
 

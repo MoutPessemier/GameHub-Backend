@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/MoutPessemier/GameHub-Backend-Express#readme",
   "dependencies": {
+    "@sentry/browser": "^5.10.2",
     "@sentry/node": "^5.7.0",
     "@types/bcrypt": "^3.0.0",
     "@types/dotenv": "^6.1.1",

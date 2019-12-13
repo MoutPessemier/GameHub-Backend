@@ -13,7 +13,7 @@ Sentry.configureScope(scope => {
 routes.get('/getPartiesNearYou', async (req, res) => {
   const maxDistance = parseInt(req.query.distance) * 1000; //convert to meters
   const myCoords = [parseFloat(req.query.lat), parseFloat(req.query.long)];
-  const parties = await models.party.model
+  let parties = await models.party.model
     .find({
       $and: [
         {
@@ -32,20 +32,17 @@ routes.get('/getPartiesNearYou', async (req, res) => {
         { participants: { $nin: [req.query.userId] } }
       ]
     })
-    .limit(25)
-    .catch(e => {
-      Sentry.captureException(e);
-      res.status(400).send(e);
-    });
-  res.send({ parties });
+    .limit(25);
+  parties = parties.filter(p => p.participants.length < p.maxSize);
+  return res.send({ parties });
 });
 
 routes.get('/getJoinedParties', async (req, res) => {
   const parties = await models.party.model.find({ participants: { $in: [req.query.userId] } }).catch(e => {
     Sentry.captureException(e);
-    res.status(400).send(e);
+    return res.sendStatus(400).send(e);
   });
-  res.send({ parties });
+  return res.send({ parties });
 });
 
 routes.post('/createParty', async (req, res) => {
@@ -65,9 +62,9 @@ routes.post('/createParty', async (req, res) => {
     })
     .catch(e => {
       Sentry.captureException(e);
-      res.status(200).send(e);
+      return res.sendStatus(200).send(e);
     });
-  res.send(party);
+  return res.send(party);
 });
 
 routes.put('/updateParty', async (req, res) => {
@@ -90,23 +87,25 @@ routes.put('/updateParty', async (req, res) => {
     )
     .catch(e => {
       Sentry.captureException(e);
-      res.status(404).send(e);
+      return res.sendStatus(404).send(e);
     });
-  res.send(updatedParty);
+  return res.send(updatedParty);
 });
 
 routes.delete('/deleteParty', async (req, res) => {
   const deletedParty = await models.party.model.findByIdAndDelete({ _id: req.body.id }).catch(e => {
     Sentry.captureException(e);
-    res.status(400).send(e);
+    return res.sendStatus(400).send(e);
   });
-  res.send(deletedParty);
+  return res.send(deletedParty);
 });
 
 routes.post('/joinParty', async (req, res) => {
   const party = await models.party.model.findById({ _id: req.body.partyId });
-  if (!(party.participants.length + 1 <= party.maxSize)) res.send({ error: 'The party is already full.' });
-  if (party.participants.includes(req.body.userId)) res.status(403).send({ error: 'You already joined this party!' });
+  if (!(party.participants.length + 1 <= party.maxSize))
+    return res.sendStatus(403).send({ error: 'The party is already full.' });
+  if (party.participants.includes(req.body.userId))
+    return res.sendStatus(403).send({ error: 'You already joined this party!' });
   const joinedParty = await models.party.model
     .findByIdAndUpdate(
       { _id: req.body.partyId },
@@ -126,14 +125,14 @@ routes.post('/joinParty', async (req, res) => {
     )
     .catch(e => {
       Sentry.captureException(e);
-      res.status(400).send(e);
+      return res.sendStatus(400).send(e);
     });
-  res.send(joinedParty);
+  return res.send(joinedParty);
 });
 
 routes.post('/declineParty', async (req, res) => {
   const party = await models.party.model.findById({ _id: req.body.partyId });
-  if (!party) res.status(404).send({ error: `No party found with id ${req.body.partyId}` });
+  if (!party) return res.sendStatus(404).send({ error: `No party found with id ${req.body.partyId}` });
   const declinedParty = await models.party.model
     .findByIdAndUpdate(
       { _id: req.body.partyId },
@@ -147,15 +146,15 @@ routes.post('/declineParty', async (req, res) => {
           type: party.location.type,
           coordinates: party.location.coordinates
         },
-        declines: [...party.declines, , req.body.userId]
+        declines: [...party.declines, req.body.userId]
       },
       { new: true, upsert: true }
     )
     .catch(e => {
       Sentry.captureException(e);
-      res.status(400).send(e);
+      return res.sendStatus(400).send(e);
     });
-  res.send(declinedParty);
+  return res.send(declinedParty);
 });
 
 export default routes;
