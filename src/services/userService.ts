@@ -10,7 +10,7 @@ Sentry.configureScope(scope => {
 });
 
 routes.get('/doesUserExist', async (req, res) => {
-  const user = await models.user.model.find({ email: req.body.email });
+  const user = await models.user.model.findOne({ email: req.query.email });
   if (user) {
     return res.send(true);
   } else {
