@@ -46,14 +46,14 @@ routes.post('/login', async (req, res) => {
 });
 
 routes.put('/updateUser', async (req, res) => {
+  let id = req.body._id ? req.body._id : req.body.id ? req.body.id : null;
   const user = await models.user.model
     .findByIdAndUpdate(
-      { _id: req.body._id },
+      { _id: id },
       {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
-        userRole: req.body.userRole,
         maxDistance: req.body.maxDistance
       },
       { new: true, upsert: true }

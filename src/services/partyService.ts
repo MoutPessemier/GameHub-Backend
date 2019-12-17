@@ -50,7 +50,6 @@ routes.post('/createParty', async (req, res) => {
     .create({
       name: req.body.name,
       date: stringToDate(req.body.date),
-      //date: dateFix(req.body.date),
       maxSize: req.body.maxSize,
       participants: req.body.participants,
       gameId: req.body.gameId,
